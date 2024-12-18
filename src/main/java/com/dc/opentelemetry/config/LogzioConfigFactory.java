@@ -24,7 +24,7 @@ public class LogzioConfigFactory {
 
     @PostConstruct
     public void init() {
-      logger.info("====> Configuration class initialized listenerHost: {} metricsToken: {} ", listenerHost, metricsToken);
+      logger.info("====> Configuration class initialized listenerHost: {} ", listenerHost);
     }
 
     @Bean
