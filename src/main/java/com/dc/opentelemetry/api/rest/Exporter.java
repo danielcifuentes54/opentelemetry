@@ -25,7 +25,7 @@ import jakarta.annotation.PostConstruct;
 public class Exporter {
 
     private static final Logger logger = LoggerFactory.getLogger(Exporter.class);
-    private static final String PHRASE = "This is an example log message";
+    private static final String PHRASE = "This is an example log message but for the v2 version";
 
     @Autowired
     private LogzioConfig logzioConfig;
@@ -43,7 +43,7 @@ public class Exporter {
         // Create and register the counter once
         this.counter = Counter
                 .builder("koronet_counter")
-                .description("custom metric to test logz")
+                .description("custom metric to test logz - v2")
                 .tags(tags)
                 .register(registry);
     }
@@ -51,7 +51,13 @@ public class Exporter {
     @GetMapping(path = "/log")
     public ResponseEntity<String> generaLog() {
         logger.info("Logging phrase: {}", PHRASE);
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("Old OK", HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/logv2")
+    public ResponseEntity<String> generaLog() {
+        logger.info("Logging phrase: {}", PHRASE);
+        return new ResponseEntity<>("OK - v2", HttpStatus.OK);
     }
 
     @GetMapping(path = "/log/{value}")
@@ -68,7 +74,7 @@ public class Exporter {
             int a = 1 / 0;
         } catch (ArithmeticException e) {
             logger.error("An error occurred: {}", e.getMessage(), e);
-            return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("v2 Error", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
