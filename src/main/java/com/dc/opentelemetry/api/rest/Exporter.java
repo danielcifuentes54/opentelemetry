@@ -43,7 +43,7 @@ public class Exporter {
         // Create and register the counter once
         this.counter = Counter
                 .builder("koronet_counter")
-                .description("custom metric to test logz - v2")
+                .description("custom metric to test logz - v3")
                 .tags(tags)
                 .register(registry);
     }
@@ -51,13 +51,13 @@ public class Exporter {
     @GetMapping(path = "/log")
     public ResponseEntity<String> generaLog() {
         logger.info("Logging phrase: {}", PHRASE);
-        return new ResponseEntity<>("Old OK", HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     @GetMapping(path = "/logv2")
-    public ResponseEntity<String> generaLog() {
+    public ResponseEntity<String> generaLogv2() {
         logger.info("Logging phrase: {}", PHRASE);
-        return new ResponseEntity<>("OK - v2", HttpStatus.OK);
+        return new ResponseEntity<>("Migrated to v3", HttpStatus.OK);
     }
 
     @GetMapping(path = "/log/{value}")
@@ -74,7 +74,7 @@ public class Exporter {
             int a = 1 / 0;
         } catch (ArithmeticException e) {
             logger.error("An error occurred: {}", e.getMessage(), e);
-            return new ResponseEntity<>("v2 Error", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("v3 Error", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
