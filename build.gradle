@@ -1,46 +1,38 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.4.0'
-	id 'io.spring.dependency-management' version '1.1.6'
-}
-
-group = 'com.dc'
-version = '0.0.1-SNAPSHOT'
-
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
-}
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    id 'java'
+    id 'application'
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-  implementation 'org.springframework.boot:spring-boot-starter-logging'
-  implementation 'io.logz.micrometer:micrometer-registry-logzio:1.0.2'
-  implementation 'org.xerial.snappy:snappy-java:1.1.9.1'
-  developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // OpenTelemetry Core (using BOM for version management)
+    implementation platform('io.opentelemetry:opentelemetry-bom:1.35.0')
+    implementation 'io.opentelemetry:opentelemetry-api'
+    implementation 'io.opentelemetry:opentelemetry-sdk'
+    implementation 'io.opentelemetry:opentelemetry-sdk-metrics'
+    
+    // OTLP Exporter
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+    
+    // Spring Boot loader (without devtools)
+    implementation 'org.springframework.boot:spring-boot-loader:3.1.5'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+application {
+    mainClass = 'com.dc.opentelemetry.OtelMetricsSender'
 }
 
-bootJar {
-    archiveBaseName = 'opentelemetry'  // Custom name for the JAR file
-    version = '1.0.0'            // Optionally set the version
+jar {
+    archiveBaseName = 'opentelemetry'
+    archiveVersion = '1.0.0'
+    manifest {
+        attributes 'Main-Class': 'com.dc.opentelemetry.OtelMetricsSender'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
