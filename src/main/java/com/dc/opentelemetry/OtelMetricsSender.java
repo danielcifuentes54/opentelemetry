@@ -4,6 +4,8 @@ import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.api.metrics.Meter;
+// If you wish to use http then replace OtlGrpcMetricExporter to io.opentelemetry.exporter.otlp.http.metrics.OtlpHttpMetricExporter
+// https://javadoc.io/doc/io.opentelemetry/opentelemetry-exporter-otlp/1.20.0/io/opentelemetry/exporter/otlp/http/metrics/package-summary.html
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.metrics.SdkMeterProvider;
